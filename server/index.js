@@ -29,6 +29,11 @@ app.use('/api/v1/post', PostImageRoutes)
 app.use('/api/v1/dalle', DalleRoutes)
 app.use('/api/v1/user', UserRoutes)
 
+app.get('/', async (req, res) => {
+    res.status(200).json({
+      message: 'Hello from Dreamcast!',
+    });
+  });
 
 app.use((err, req, res, next) =>
 {
