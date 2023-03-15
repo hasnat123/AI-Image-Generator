@@ -31,7 +31,7 @@ app.use('/api/v1/user', UserRoutes)
 
 app.get('/', async (req, res) => {
     res.status(200).json({
-      message: 'Hello from Dreamcast!',
+      message: 'Hello from Dreamscape!',
     });
   });
 

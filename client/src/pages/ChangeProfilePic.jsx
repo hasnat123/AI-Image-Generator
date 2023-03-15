@@ -123,7 +123,7 @@ const ChangeProfilePic = () => {
                 // Update user's profile picture in the backend
                 axios
                   .put(
-                    `http://localhost:8080/api/v1/user`,
+                    `https://imagegeneratorai-9kb4.onrender.com/api/v1/user`,
                     { image: downloadURL },
                     { withCredentials: true }
                   )

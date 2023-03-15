@@ -28,7 +28,7 @@ const CreatePost = () => {
       setLoading(true)
 
       try {
-        const res = await axios.post('http://localhost:8080/api/v1/post', {...form}, { withCredentials: true })
+        const res = await axios.post('https://imagegeneratorai-9kb4.onrender.com/api/v1/post', {...form}, { withCredentials: true })
         navigate('/')
       }
       catch (error)
@@ -62,7 +62,7 @@ const CreatePost = () => {
       try
       {
         setGeneratingImage(true)
-        const res = await axios.post('http://localhost:8080/api/v1/dalle', { prompt: form.prompt }, { withCredentials: true })
+        const res = await axios.post('https://imagegeneratorai-9kb4.onrender.com/api/v1/dalle', { prompt: form.prompt }, { withCredentials: true })
         setForm({...form, photo: `data:image/jpeg;base64,${res.data.photo}`})
       }
       catch (err)
