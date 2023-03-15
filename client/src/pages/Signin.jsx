@@ -194,7 +194,7 @@ const Signin = () => {
           </div>)
         }
         
-        <ReCAPTCHA ref={recaptchaRef} size='invisible' sitekey="6LdQjv8kAAAAAP4MJo7UUDnifywKzWyI5IceufW7"/>
+        <ReCAPTCHA ref={recaptchaRef} size='invisible' sitekey="6LcrSgUlAAAAAOjoQ3rrxPEf4OsV2MFDpbdKsA5z"/>
 
         <div className='m-auto mt-0 sm:mt-[7vh] flex items-center sm:border-[2px] border-gray-300 rounded-[20px]  flex-col gap-[3px] sm:gap-[10px] p-[1rem] sm:p-[2rem] w-[97%] max-w-[450px]'>
             <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[28px] sm:text-[32px] text-center'>Sign in</h1>
