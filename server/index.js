@@ -15,7 +15,7 @@ const app = express()
 dotenv.config()
 
 const corsOptions ={
-    origin:'http://localhost:5173', 
+    origin:'https://imagegeneratorai-9kb4.onrender.com', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
