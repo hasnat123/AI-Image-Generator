@@ -22,7 +22,7 @@ const corsOptions ={
 
 app.use(express.json({ limit: '50mb' }))
 app.use(CookieParser())
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use('/api/v1/auth', AuthRoutes)
 app.use('/api/v1/post', PostImageRoutes)
