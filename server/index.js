@@ -15,7 +15,7 @@ const app = express()
 dotenv.config()
 
 const corsOptions ={
-    origin: 'https://imagegeneratorai-client.onrender.com',
+    origin: ['http://localhost:5173', 'https://imagegeneratorai-9kb4.onrender.com', 'http://imagegeneratorai-9kb4.onrender.com', 'https://imagegeneratorai-client.onrender.com'],
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
@@ -54,10 +54,10 @@ const startServer = async() =>
     {
         connectDB(process.env.MONGODB_URL)
 
-        app.listen(process.env.PORT, () =>
-        {
-            console.log(`Listening to port http://localhost:${process.env.PORT}`)
-        })
+        // app.listen(process.env.PORT, () =>
+        // {
+        //     console.log(`Listening to port http://localhost:${process.env.PORT}`)
+        // })
     }
     catch (err)
     {
