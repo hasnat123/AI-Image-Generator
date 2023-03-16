@@ -15,14 +15,14 @@ const app = express()
 dotenv.config()
 
 const corsOptions ={
-    origin:'https://imagegeneratorai-9kb4.onrender.com', 
+    origin: ['http://localhost:5173', 'https://imagegeneratorai-9kb4.onrender.com', 'http://imagegeneratorai-9kb4.onrender.com'],
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
 
 app.use(express.json({ limit: '50mb' }))
 app.use(CookieParser())
-app.use(cors())
+app.use(cors(corsOptions))
 
 app.use('/api/v1/auth', AuthRoutes)
 app.use('/api/v1/post', PostImageRoutes)
