@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/hasnat123/AI-Image-Generator#readme",
   "dependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.21"
   }
 }
