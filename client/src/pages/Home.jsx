@@ -36,7 +36,7 @@ const Home = ({ type }) => {
             setLoading(true)
             try
             {
-                const res = type === 'user' ? await axios.get('https://imagegeneratorai-server.onrender.com/api/v1/post/user-posts', { withCredentials: true }) : type === 'favourites' ? await axios.get('https://imagegeneratorai-server.onrender.com/api/v1/post/favourites', { withCredentials: true }) : await axios.get('https://imagegeneratorai-server.onrender.com/api/v1/post', { withCredentials: true })
+                const res = type === 'user' ? await axios.get('https://api.dreamscapepro.com/api/v1/post/user-posts', { withCredentials: true }) : type === 'favourites' ? await axios.get('https://api.dreamscapepro.com/api/v1/post/favourites', { withCredentials: true }) : await axios.get('https://api.dreamscapepro.com/api/v1/post', { withCredentials: true })
 
                 if (res.status === 200) type === 'user' ? dispatch(newPosts(res.data.data.reverse())) : type === 'favourites' ? dispatch(newFavourites(res.data.data.reverse()))  : setAllPosts(res.data.data.reverse())
                 console.log(res.data.data)

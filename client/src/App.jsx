@@ -47,7 +47,7 @@ const App = () => {
 
     try
     {
-      const res = await axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/logout', null, { withCredentials: true })
+      const res = await axios.post('https://api.dreamscapepro.com/api/v1/auth/logout', null, { withCredentials: true })
       console.log(res.data)
       setOpen(false)
       dispatch(logout())

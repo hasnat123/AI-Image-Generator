@@ -17,8 +17,8 @@ const Card = ({ _id, name, prompt, photo, profilePic, type }) => {
     try
     {
       const res = currentUser.favourites.some(favourite => favourite._id === _id)
-        ? (await axios.put('https://imagegeneratorai-server.onrender.com/api/v1/user/unfavourite', { _id }, { withCredentials: true }))
-        : (await axios.put('https://imagegeneratorai-server.onrender.com/api/v1/user/favourite', { _id }, { withCredentials: true }))
+        ? (await axios.put('https://api.dreamscapepro.com/api/v1/user/unfavourite', { _id }, { withCredentials: true }))
+        : (await axios.put('https://api.dreamscapepro.com/api/v1/user/favourite', { _id }, { withCredentials: true }))
       dispatch(favourites(res.data))
       console.log(res.data)
     }

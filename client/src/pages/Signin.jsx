@@ -62,7 +62,7 @@ const Signin = () => {
         
         try
         {
-          const res = await axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/signin', { ...signinForm }, { withCredentials: true })
+          const res = await axios.post('https://api.dreamscapepro.com/api/v1/auth/signin', { ...signinForm }, { withCredentials: true })
           dispatch(loginSuccess(res.data))
           setSignupError('')
           setSigninError('')
@@ -93,7 +93,7 @@ const Signin = () => {
         signInWithPopup(auth, provider)
         .then((res) =>
         {
-          axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/google',
+          axios.post('https://api.dreamscapepro.com/api/v1/auth/google',
           {
             username: res.user.displayName,
             email: res.user.email,
@@ -130,7 +130,7 @@ const Signin = () => {
         dispatch(signupStart())
         try
         {
-          const res = await axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/signup', { ...signupForm }, { withCredentials: true })
+          const res = await axios.post('https://api.dreamscapepro.com/api/v1/auth/signup', { ...signupForm }, { withCredentials: true })
           dispatch(signupSuccess())
           if (res.data.message && res.data.message === 'Verification') setPopup(true)
           setSignupError('')
@@ -165,7 +165,7 @@ const Signin = () => {
       {
         try
         {
-          const res = await axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/resend-email', { ...signupForm }, { withCredentials: true })
+          const res = await axios.post('https://api.dreamscapepro.com/api/v1/auth/resend-email', { ...signupForm }, { withCredentials: true })
           setResend(true)
           setResendCooldown(true)
           setTimeout(() => setResendCooldown(false), 10 * 60 * 1000);
