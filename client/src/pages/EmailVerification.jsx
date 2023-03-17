@@ -12,7 +12,7 @@ const EmailVerification = () => {
         const Verify = async() =>
         {
             try {
-                const res = await axios.get(`https://imagegeneratorai-server.onrender.comapi/v1/auth/${params.id}/verify/${params.token}`)
+                const res = await axios.get(`https://imagegeneratorai-server.onrender.com/api/v1/auth/${params.id}/verify/${params.token}`)
                 console.log(res.data)
             } catch (error) {
                 console.log(error.response.data.message)
