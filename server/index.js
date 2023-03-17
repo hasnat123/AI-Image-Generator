@@ -15,7 +15,7 @@ const app = express()
 dotenv.config()
 
 const corsOptions ={
-    origin: ['http://localhost:5173', 'https://imagegeneratorai-server.onrender.com', 'http://imagegeneratorai-9kb4.onrender.com', 'https://imagegeneratorai-client.onrender.com', 'https://www.dreamscapepro.com', 'https://api.dreamscapepro.com'],
+    origin: ['http://localhost:5173', 'https://imagegeneratorai-server.onrender.com', 'http://imagegeneratorai-9kb4.onrender.com', 'https://imagegeneratorai-client.onrender.com', 'https://www.dreamscapepro.com', 'https://api.dreamscapepro.com', 'http://localhost:8080'],
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }

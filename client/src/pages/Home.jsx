@@ -55,6 +55,26 @@ const Home = ({ type }) => {
         
     }, [type])
 
+    useEffect(() =>
+    {
+        const fetchFavourites = async() =>
+        {
+            try
+            {
+                const res = await axios.get('https://api.dreamscapepro.com/api/v1/post/favourites', { withCredentials: true })
+                dispatch(newFavourites(res.data.data.reverse()))
+                console.log(res.data.data)
+            }
+            catch(err)
+            {
+                console.log(err.response.data.message)
+            }
+        }
+        
+        fetchFavourites()
+        
+    }, [])
+
     const HandleSearch = (e) =>
     {
         clearTimeout(searchTimeout)
