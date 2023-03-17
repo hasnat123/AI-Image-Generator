@@ -62,7 +62,7 @@ const Signin = () => {
         
         try
         {
-          const res = await axios.post('https://imagegeneratorai-9kb4.onrender.com/api/v1/auth/signin', { ...signinForm }, { withCredentials: true })
+          const res = await axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/signin', { ...signinForm }, { withCredentials: true })
           dispatch(loginSuccess(res.data))
           setSignupError('')
           setSigninError('')
@@ -93,7 +93,7 @@ const Signin = () => {
         signInWithPopup(auth, provider)
         .then((res) =>
         {
-          axios.post('https://imagegeneratorai-9kb4.onrender.com/api/v1/auth/google',
+          axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/google',
           {
             username: res.user.displayName,
             email: res.user.email,
@@ -130,7 +130,7 @@ const Signin = () => {
         dispatch(signupStart())
         try
         {
-          const res = await axios.post('https://imagegeneratorai-9kb4.onrender.com/api/v1/auth/signup', { ...signupForm }, { withCredentials: true })
+          const res = await axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/signup', { ...signupForm }, { withCredentials: true })
           dispatch(signupSuccess())
           if (res.data.message && res.data.message === 'Verification') setPopup(true)
           setSignupError('')
@@ -165,7 +165,7 @@ const Signin = () => {
       {
         try
         {
-          const res = await axios.post('https://imagegeneratorai-9kb4.onrender.com/api/v1/auth/resend-email', { ...signupForm }, { withCredentials: true })
+          const res = await axios.post('https://imagegeneratorai-server.onrender.com/api/v1/auth/resend-email', { ...signupForm }, { withCredentials: true })
           setResend(true)
           setResendCooldown(true)
           setTimeout(() => setResendCooldown(false), 10 * 60 * 1000);
@@ -194,7 +194,7 @@ const Signin = () => {
           </div>)
         }
         
-        <ReCAPTCHA ref={recaptchaRef} size='invisible' sitekey="6LcrSgUlAAAAAOjoQ3rrxPEf4OsV2MFDpbdKsA5z"/>
+        <ReCAPTCHA ref={recaptchaRef} size='invisible' sitekey="6LelPQolAAAAAKaC8AP6EwyMKFcEZMWBER--8E8X"/>
 
         <div className='m-auto mt-0 sm:mt-[7vh] flex items-center sm:border-[2px] border-gray-300 rounded-[20px]  flex-col gap-[3px] sm:gap-[10px] p-[1rem] sm:p-[2rem] w-[97%] max-w-[450px]'>
             <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[28px] sm:text-[32px] text-center'>Sign in</h1>
