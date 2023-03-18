@@ -31,7 +31,7 @@ export const PostImage = async(req, res) =>
         // const { name, prompt, photo } = req.body
         const user = await UserModel.findById(req.user.id)
         const { prompt, photo } = req.body
-        const photoUrl = await cloudinary.uploader.upload(photo, { secure: true, resource_type: "auto" })
+        const photoUrl = await cloudinary.uploader.upload(photo, { secure: true, resource_type: "auto", fetch_format: "auto", quality: "auto", crop: "limit" })
         const newPost = await PostModel.create({ name: user.username, prompt, photo: photoUrl.url, profilePic: user.image})
         await UserModel.findByIdAndUpdate(req.user.id, { $push: { posts: newPost._id }}, { new: true })
         res.status(201).json({ success: true, data: newPost })
