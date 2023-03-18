@@ -142,7 +142,7 @@ export const ResendVerificationEmail = async (req, res, next) =>
                 token = await new Token({ userID: user._id, token: crypto.randomBytes(32).toString('hex') }).save()
             }
             const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`
-            await EmailVerification(user.email, 'Verify Email', url)
+            await EmailVerification(user.email, 'Verify Email', `Click the link to verify your email: ${url}`)
 
             return res.status(200).json({ message: 'Verification email resent' })
         }
