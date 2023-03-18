@@ -31,7 +31,7 @@ export const Signup = async (req, res, next) =>
         const token = await new Token({ userID: newUser._id, token: crypto.randomBytes(32).toString('hex') }).save()
 
         const url = `${process.env.BASE_URL}users/${newUser._id}/verify/${token.token}`
-        await EmailVerification(newUser.email, 'Verify Email', url)
+        await EmailVerification(newUser.email, `Click the link to verify your email: ${url}`)
 
         return res.status(200).json({ message: 'Verification' })
         // res.cookie('access_token', token, { httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 * 24 * 3 }).status(200).json(others)
@@ -63,7 +63,7 @@ export const Signin = async (req, res, next) =>
             {
                 token = await new Token({ userID: user._id, token: crypto.randomBytes(32).toString('hex') }).save()
                 const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`
-                await EmailVerification(user.email, 'Verify Email', url)
+                await EmailVerification(user.email, `Click the link to verify your email: ${url}`)
             }
             return res.status(400).json({ message: 'Please check your email to verify your account' })
         }
