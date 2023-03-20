@@ -114,7 +114,7 @@ const CreatePost = () => {
               <img src={form.photo} alt={form.prompt} className='w-full h-full object-contain' />
             ) :
             (
-              <img src={preview} alt="preview" className='w-9/12 h-9/12 object-contain opacity-40'/>
+              <img src={preview} alt="Preview image" className='w-9/12 h-9/12 object-contain opacity-40'/>
             )}
 
 

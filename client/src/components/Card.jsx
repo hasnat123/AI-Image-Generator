@@ -38,14 +38,14 @@ const Card = ({ _id, name, prompt, photo, profilePic, type }) => {
         <div className='mt-2 flex justify-between items-center gap-2'>
           <div className='flex items-center gap-2 overflow-hidden'>
           {type !== 'user' && (profilePic ?
-            (<img src={profilePic} className='w-7 h-7 rounded-full object-cover'/>) : 
+            (<img src={profilePic} alt='User profile picture' className='w-7 h-7 rounded-full object-cover'/>) : 
             (<div className='w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold'>
               {name && name[0]}
             </div>))}
             <p className='flex-1 text-white text-sm whitespace-nowrap overflow-hidden text-ellipsis'>{(type !== 'user') && name}</p>
           </div>
           <button type='button' onClick={() => downloadImage(_id, photo)} className='outline-none bg-transparent border-none'>
-            <img src={download} alt="download" className='w-6 h-6 min-w-[24px] object-contain invert'/>
+            <img src={download} alt="Download image" className='w-6 h-6 min-w-[24px] object-contain invert'/>
           </button>
         </div>
       </div>
