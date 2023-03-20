@@ -10,6 +10,7 @@ import { googleStart, loginFailure, loginStart, loginSuccess, signupStart, signu
 
 import CloseIcon from '@mui/icons-material/Close';
 import EmailIcon from '@mui/icons-material/Email';
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 const Signin = () => {
 
@@ -181,49 +182,54 @@ const Signin = () => {
     }
 
   return (
-    <div className='flex flex-col justify-center items-center'>
-        {popup &&
-          (<div className='fixed z-10 flex justify-center items-center w-[100%] h-[100%] top-0 bg-black bg-opacity-80'>
-            <div className='p-5 relative flex flex-col justify-center items-center text-center w-[90%] max-w-[1000px] h-[90%] sm:w-[80%] sm:h-[80%] dark:bg-[#222328] bg-[#eeeeee] rounded-[1rem] sm:rounded-[2rem]'>
-              <CloseIcon sx={{ fontSize: { md: '2rem' }}} className='bg-[#222328] dark:bg-[#eeeeee] absolute top-[15px] sm:top-[20px] right-[15px] sm:right-[20px] dark:text-[#222328] text-[#eeeeee] cursor-pointer rounded-[5px]' onClick={HandleClose}/>
-              <EmailIcon sx={{ fontSize: {xs:'7rem', sm:'8rem', lg: '10rem' }}}className='dark:text-[#222328] text-[#eeeeee] p-6 bg-[#222328] dark:bg-[#eeeeee] rounded-full'/>
-              <h1 className='mt-10 font-extrabold text-[#222328] dark:text-[#eeeeee] text-[25px] sm:text-[28px] md:text-[35px] xl:text-[45px]'>{resend ? 'Email Resent' : 'Verify your email'}</h1>
-              <p className='mt-3 text-[#666e75] dark:text-[#CCCCCC] text-[16px] md:text-[19px] xl:text-[22px] max-w-[750px]'>{resend ? `A verification link has been re-sent to ${signupForm.email}. The link will expire in 1 hour.` : `An email has been sent to ${signupForm.email}. Please click the link in the email to activate your account. The link will expire in 1 hour.`}</p>
-              {resend ? (<p className='mt-10 text-[#666e75] dark:text-[#CCCCCC] text-[16px] md:text-[19px] xl:text-[22px] max-w-[750px]'><span className={resendCooldown ? 'font-bold underline cursor-not-allowed' : 'font-bold underline cursor-pointer'} onClick={HandleResend}>Click here</span> after 10 minutes if you still did not receive an email.</p>) : (<p className='mt-10 text-[#666e75] dark:text-[#CCCCCC] text-[16px] md:text-[19px] xl:text-[22px] max-w-[750px]'><span className='font-bold underline cursor-pointer' onClick={HandleResend}>Click here</span> if you did not receive an email.</p>)}
-            </div>
-          </div>)
-        }
-        
-        <ReCAPTCHA ref={recaptchaRef} size='invisible' sitekey="6LeluRElAAAAALuZE4v1uELfoF3mpLS68ryXzt9i"/>
+    <HelmetProvider>
+      <Helmet>
+        <title>Dreamscape | Sign In</title>
+      </Helmet>
+      <div className='flex flex-col justify-center items-center'>
+          {popup &&
+            (<div className='fixed z-10 flex justify-center items-center w-[100%] h-[100%] top-0 bg-black bg-opacity-80'>
+              <div className='p-5 relative flex flex-col justify-center items-center text-center w-[90%] max-w-[1000px] h-[90%] sm:w-[80%] sm:h-[80%] dark:bg-[#222328] bg-[#eeeeee] rounded-[1rem] sm:rounded-[2rem]'>
+                <CloseIcon sx={{ fontSize: { md: '2rem' }}} className='bg-[#222328] dark:bg-[#eeeeee] absolute top-[15px] sm:top-[20px] right-[15px] sm:right-[20px] dark:text-[#222328] text-[#eeeeee] cursor-pointer rounded-[5px]' onClick={HandleClose}/>
+                <EmailIcon sx={{ fontSize: {xs:'7rem', sm:'8rem', lg: '10rem' }}}className='dark:text-[#222328] text-[#eeeeee] p-6 bg-[#222328] dark:bg-[#eeeeee] rounded-full'/>
+                <h1 className='mt-10 font-extrabold text-[#222328] dark:text-[#eeeeee] text-[25px] sm:text-[28px] md:text-[35px] xl:text-[45px]'>{resend ? 'Email Resent' : 'Verify your email'}</h1>
+                <p className='mt-3 text-[#666e75] dark:text-[#CCCCCC] text-[16px] md:text-[19px] xl:text-[22px] max-w-[750px]'>{resend ? `A verification link has been re-sent to ${signupForm.email}. The link will expire in 1 hour.` : `An email has been sent to ${signupForm.email}. Please click the link in the email to activate your account. The link will expire in 1 hour.`}</p>
+                {resend ? (<p className='mt-10 text-[#666e75] dark:text-[#CCCCCC] text-[16px] md:text-[19px] xl:text-[22px] max-w-[750px]'><span className={resendCooldown ? 'font-bold underline cursor-not-allowed' : 'font-bold underline cursor-pointer'} onClick={HandleResend}>Click here</span> after 10 minutes if you still did not receive an email.</p>) : (<p className='mt-10 text-[#666e75] dark:text-[#CCCCCC] text-[16px] md:text-[19px] xl:text-[22px] max-w-[750px]'><span className='font-bold underline cursor-pointer' onClick={HandleResend}>Click here</span> if you did not receive an email.</p>)}
+              </div>
+            </div>)
+          }
 
-        <div className='m-auto mt-0 sm:mt-[7vh] flex items-center sm:border-[2px] border-gray-300 rounded-[20px]  flex-col gap-[3px] sm:gap-[10px] p-[1rem] sm:p-[2rem] w-[97%] max-w-[450px]'>
-            <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[28px] sm:text-[32px] text-center'>Sign in</h1>
-            <h2 className='my-1 text-[#666e75] dark:text-[#CCCCCC] text-[16px] sm:text-[20px] text-center max-w-[500px]'>To continue to Dreamscape</h2>
-            <Form type='email' name='email' value={signinForm.email} placeholder='Email' HandleChange={HandleChangeSignin}/>
-            <Form type='password' name='password' value={signinForm.password} placeholder='Password' HandleChange={HandleChangeSignin}/>
-            { signinError && (<div className='mt-2 text-[#222328] dark:text-[#eeeeee]'>{signinError}</div>) }
+          <ReCAPTCHA ref={recaptchaRef} size='invisible' sitekey="6LeluRElAAAAALuZE4v1uELfoF3mpLS68ryXzt9i"/>
 
-            <button
-                onClick={HandleSignin}
-                className='font-inter font-medium bg-[#6f45d1] text-white mt-[15px] px-[20px] py-[10px] rounded-md'
-            >{loginLoading ? 'loading...' : 'Sign in'}</button>
-            <span className='w-[80%] h-0.5 my-[2vh] border-b border-gray-300'></span>
-            <button
-                onClick={HandleSigninGoogle}
-                className='font-inter font-medium bg-[#6f45d1] text-white my-[1vh] px-[20px] py-[10px] rounded-md'
-            >{googleLoading ? 'loading...' : 'Sign in with Google'}</button>
-            <span className='w-[80%] h-0.5 my-[2vh] border-b border-gray-300'></span>
-            <Form type='text' name='username' value={signupForm.username} placeholder='Username' HandleChange={HandleChangeSignup}/>
-            <Form type='email' name='email' value={signupForm.email} placeholder='Email' HandleChange={HandleChangeSignup}/>
-            <Form type='password' name='password' value={signupForm.password} placeholder='Password' HandleChange={HandleChangeSignup}/>
-            { signupError && (<div className='mt-2 text-[#222328] dark:text-[#eeeeee]'>{signupError}</div>) }
+          <div className='m-auto mt-0 sm:mt-[7vh] flex items-center sm:border-[2px] border-gray-300 rounded-[20px]  flex-col gap-[3px] sm:gap-[10px] p-[1rem] sm:p-[2rem] w-[97%] max-w-[450px]'>
+              <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[28px] sm:text-[32px] text-center'>Sign in</h1>
+              <h2 className='my-1 text-[#666e75] dark:text-[#CCCCCC] text-[16px] sm:text-[20px] text-center max-w-[500px]'>To continue to Dreamscape</h2>
+              <Form type='email' name='email' value={signinForm.email} placeholder='Email' HandleChange={HandleChangeSignin}/>
+              <Form type='password' name='password' value={signinForm.password} placeholder='Password' HandleChange={HandleChangeSignin}/>
+              { signinError && (<div className='mt-2 text-[#222328] dark:text-[#eeeeee]'>{signinError}</div>) }
 
-            <button
-                onClick={HandleSignup}
-                className='font-inter font-medium bg-[#6f45d1] text-white my-[15px] px-[20px] py-[10px] rounded-md'
-            >{signupLoading ? 'loading...' : 'Sign up'}</button>
-        </div>
-    </div>
+              <button
+                  onClick={HandleSignin}
+                  className='font-inter font-medium bg-[#6f45d1] text-white mt-[15px] px-[20px] py-[10px] rounded-md'
+              >{loginLoading ? 'loading...' : 'Sign in'}</button>
+              <span className='w-[80%] h-0.5 my-[2vh] border-b border-gray-300'></span>
+              <button
+                  onClick={HandleSigninGoogle}
+                  className='font-inter font-medium bg-[#6f45d1] text-white my-[1vh] px-[20px] py-[10px] rounded-md'
+              >{googleLoading ? 'loading...' : 'Sign in with Google'}</button>
+              <span className='w-[80%] h-0.5 my-[2vh] border-b border-gray-300'></span>
+              <Form type='text' name='username' value={signupForm.username} placeholder='Username' HandleChange={HandleChangeSignup}/>
+              <Form type='email' name='email' value={signupForm.email} placeholder='Email' HandleChange={HandleChangeSignup}/>
+              <Form type='password' name='password' value={signupForm.password} placeholder='Password' HandleChange={HandleChangeSignup}/>
+              { signupError && (<div className='mt-2 text-[#222328] dark:text-[#eeeeee]'>{signupError}</div>) }
+
+              <button
+                  onClick={HandleSignup}
+                  className='font-inter font-medium bg-[#6f45d1] text-white my-[15px] px-[20px] py-[10px] rounded-md'
+              >{signupLoading ? 'loading...' : 'Sign up'}</button>
+          </div>
+      </div>
+    </HelmetProvider>
   )
 }
 

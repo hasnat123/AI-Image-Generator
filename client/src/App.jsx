@@ -16,12 +16,8 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 
 import { logoDark } from './assets'
 import { logoLight } from './assets'
-import { CreatePost, Home } from './pages'
-import Signin from './pages/Signin'
+import { ChangeProfilePic, CreatePost, EmailVerification, ErrorPage, Home, Signin } from './pages'
 import { logout } from './Redux/UserSlice'
-import ChangeProfilePic from './pages/ChangeProfilePic';
-import ErrorPage from './pages/ErrorPage';
-import EmailVerification from './pages/EmailVerification';
 
 const App = () => {
 
@@ -70,7 +66,6 @@ const App = () => {
           name="description"
           content="Unleash your creativity with Dreamscape, a revolutionary tool for creating digital art and realistic images with the power of artificial intelligence."
         />
-
       </Helmet>
 
       <BrowserRouter>
