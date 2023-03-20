@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const ErrorPage = () => {
   return (
-    <div className='absolute top-[91px] sm:top-[110px] right-0 bottom-0 left-0 flex flex-col items-center justify-center gap-[1rem] text-center m-auto'>
+    <div className='flex flex-col items-center justify-center gap-[1rem] text-center mt-[15vh]'>
       <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[56px] sm:text-[87.5px]'>404</h1>
       <h2 className='text-[#222328] dark:text-[#eeeeee] text-[16px] sm:text-[25px] max-w-[500px]'>Oops! Page Not Found</h2>
       <p className='text-[#666e75] dark:text-[#CCCCCC] text-[16px] sm:text-[25px] max-w-[500px]'>The page you are looking for does not seem to exist</p>
