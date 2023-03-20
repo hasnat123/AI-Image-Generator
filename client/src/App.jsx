@@ -60,7 +60,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <div className={`scrollbar-thin scrollbar-thumb-black scrollbar-track-black ${isDark ? 'dark' : ''}`}>
+      <div className={`${isDark ? 'dark' : ''}`}>
         <header className='bg-[#fff] dark:bg-[#202124] w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-[#e6ebff4] dark:border-b-[#3C4043]' onClick={HandleToggle}>
           <Link to='/'>
             {isDark ? (<img src={logoDark} alt="logo" className='w-[3.5em] sm:w-[75px] object-contain'/>) : (<img src={logoLight} alt="logo" className='w-[3.5em] sm:w-[75px] object-contain'/>)}
