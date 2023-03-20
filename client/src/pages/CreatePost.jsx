@@ -134,13 +134,13 @@ const CreatePost = () => {
           {error && <p className='mt-5 text-[#df3333]'>You must enter a prompt</p>}
 
           <div className='mt-5 flex gap-5'>
-              <button type='button' onClick={HandleGenerate} className='text-white bg-green-700 font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center'>
+              <button disabled={(generatingImage || loading) ? true : false} type='button' onClick={HandleGenerate} className='text-white bg-green-700 font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center'>
                 {generatingImage ? 'Generating...' : 'Generate'}
               </button>
           </div>
           <div className='mt-10'>
             <p className='mt-2 text-[#666e75] dark:text-[#c2c4c7] text-[14px]'>Your image will be saved to your gallery when you share it with the community.</p>
-              <button type='submit' className='mt-3 text-white bg-[#6f45d1] font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center'>
+              <button disabled={(generatingImage || loading) ? true : false} type='submit' className='mt-3 text-white bg-[#6f45d1] font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center'>
                 {loading ? 'Sharing...' : 'Share with community'}
               </button>
           </div>
