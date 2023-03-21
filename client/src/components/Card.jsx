@@ -1,5 +1,5 @@
 import React from 'react'
-import { download } from '../assets'
+import { download, enlarge } from '../assets'
 import { downloadImage } from '../utils'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from 'axios';
@@ -11,6 +11,8 @@ const Card = ({ _id, name, prompt, photo, profilePic, type }) => {
   const { currentUser } = useSelector((state) => state.user)
 
   const dispatch = useDispatch()
+
+  const [setEnlarge, setSetEnlarge] = useState(false)
 
   const HandleFavourite = async () =>
   {
@@ -30,6 +32,9 @@ const Card = ({ _id, name, prompt, photo, profilePic, type }) => {
 
   return (
     <div className ='rounded-xl group relative z-0 shadow-card dark:shadow-card_dark hover:shadow-cardhover dark:hover:shadow-cardhover_dark card'>
+      <div className='fixed w-[90%] h-[90%] z-100 rounded-xl'>
+        <img src={photo} alt={prompt} className='w-full h-auto object-cover rounded-xl'/>
+      </div>
       {/* {currentUser?.favourites?.some(favourite => favourite?._id === _id) ? <FavoriteIcon className='group-hover:block hidden absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{ color: '#db1e1e', fontSize: '2.5em' }}/> : (<FavoriteIcon className='group-hover:block hidden absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{fontSize: '2.5em' }}/>)} */}
       <div className='group-hover:block hidden'><FavoriteIcon className='absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{ color: currentUser?.favourites?.some(favourite => favourite?._id === _id) ? '#6f45d1' : '', fontSize: '2.5em' }}/></div>
       <img src={photo} alt={prompt} className='w-full h-auto object-cover rounded-xl'/>
@@ -44,6 +49,9 @@ const Card = ({ _id, name, prompt, photo, profilePic, type }) => {
             </div>))}
             <p className='flex-1 text-white text-sm whitespace-nowrap overflow-hidden text-ellipsis'>{(type !== 'user') && name}</p>
           </div>
+          <button type='button' onClick={() => setEnlarge(true)} className='outline-none bg-transparent border-none'>
+            <img src={enlarge} alt="Enlarge image" className='w-6 h-6 min-w-[24px] object-contain invert'/>
+          </button>
           <button type='button' onClick={() => downloadImage(_id, photo)} className='outline-none bg-transparent border-none'>
             <img src={download} alt="Download image" className='w-6 h-6 min-w-[24px] object-contain invert'/>
           </button>
