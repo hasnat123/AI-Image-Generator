@@ -12,7 +12,7 @@ const Card = ({ _id, name, prompt, photo, profilePic, type }) => {
 
   const dispatch = useDispatch()
 
-  const [setEnlarge, setSetEnlarge] = useState(false)
+  const [enlarge, setEnlarge] = useState(false)
 
   const HandleFavourite = async () =>
   {
