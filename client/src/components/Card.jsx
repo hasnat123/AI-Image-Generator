@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { download, enlarge } from '../assets'
 import { downloadImage } from '../utils'
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -32,9 +32,9 @@ const Card = ({ _id, name, prompt, photo, profilePic, type }) => {
 
   return (
     <div className ='rounded-xl group relative z-0 shadow-card dark:shadow-card_dark hover:shadow-cardhover dark:hover:shadow-cardhover_dark card'>
-      <div className='fixed w-[90%] h-[90%] z-100 rounded-xl'>
+      {enlarge && (<div className='fixed w-[90%] h-[90%] z-100 rounded-xl'>
         <img src={photo} alt={prompt} className='w-full h-auto object-cover rounded-xl'/>
-      </div>
+      </div>)}
       {/* {currentUser?.favourites?.some(favourite => favourite?._id === _id) ? <FavoriteIcon className='group-hover:block hidden absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{ color: '#db1e1e', fontSize: '2.5em' }}/> : (<FavoriteIcon className='group-hover:block hidden absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{fontSize: '2.5em' }}/>)} */}
       <div className='group-hover:block hidden'><FavoriteIcon className='absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{ color: currentUser?.favourites?.some(favourite => favourite?._id === _id) ? '#6f45d1' : '', fontSize: '2.5em' }}/></div>
       <img src={photo} alt={prompt} className='w-full h-auto object-cover rounded-xl'/>
