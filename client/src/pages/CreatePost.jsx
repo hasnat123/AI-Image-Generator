@@ -140,7 +140,7 @@ const CreatePost = () => {
           </div>
           <div className='mt-10'>
             <p className='mt-2 text-[#666e75] dark:text-[#c2c4c7] text-[14px]'>Your image will be saved to your gallery when you share it with the community.</p>
-              <button disabled={(generatingImage || loading) ? true : false} type='submit' className={`${(generatingImage || loading) ? 'cursor-not-allowed bg-[#724ccc]' : 'bg-[#6f45d1]'} mt-3 text-white font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center`}>
+              <button disabled={(generatingImage || loading) ? true : false} type='submit' className={`${(generatingImage || loading) ? 'cursor-not-allowed bg-[#7551ca]' : 'bg-[#6f45d1]'} mt-3 text-white font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center`}>
                 {loading ? 'Sharing...' : 'Share with community'}
               </button>
           </div>
