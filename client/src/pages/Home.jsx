@@ -6,10 +6,11 @@ import { Loader, Card, Form } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { newFavourites, newPosts } from '../Redux/UserSlice'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
+import CloseIcon from '@mui/icons-material/Close';
 
-const RenderCards = ({ data, title, type }) =>
+const RenderCards = ({ data, title, type, setEnlarge }) =>
 {
-    if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} type={type}/>)
+    if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} type={type} setEnlarge={setEnlarge}/>)
     return (
         <h2 className='mt-5 font-bold text-[#222328] dark:text-[#eeeeee] text-xl uppercase'>
             {title}
@@ -29,6 +30,9 @@ const Home = ({ type }) => {
     const [searchText, setSearchText] = useState('')
     const [searchedRes, setSearchedRes] = useState(null)
     const [searchTimeout, setSearchTimeout] = useState(null)
+
+    const [enlarge, setEnlarge] = useState('')
+
 
     useEffect(() =>
     {
@@ -85,7 +89,7 @@ const Home = ({ type }) => {
         setSearchTimeout(
             setTimeout(() =>
             {
-                const res = type === 'favourites' ? currentUser.favourites.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase())) : allPosts.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase()))
+                const res = type === 'user' ? currentUser.posts.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase())) : type === 'favourites' ? currentUser.favourites.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase())) : allPosts.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase()))
                 setSearchedRes(res)
             }, 500)
         )
@@ -97,6 +101,12 @@ const Home = ({ type }) => {
         <Helmet>
           <title>Dreamscape | {type === 'user' ? 'Gallery' : type === 'favourites' ? 'Favourites' : 'Home'}</title>
         </Helmet>
+        {enlarge && (<div className='bg-black bg-opacity-95 fixed inset-0 flex items-center justify-center z-50'>
+            <div className='w-[93%] max-w-[30rem] lg:max-w-[35rem] xl:max-w-[45rem] h-auto rounded-xl'>
+              <CloseIcon sx={{ fontSize:  { xs: '1.85rem', sm: '2rem', md: '2.25rem' }}} className='absolute bg-[#eeeeee] top-[25px] sm:top-[30px] md:top-[40px] right-[3.5%] md:right-[40px] text-[#222328] cursor-pointer rounded-[5px]' onClick={() => setEnlarge('')}/>
+              <img src={enlarge} className='w-[100%] h-auto object-cover rounded-xl'/>
+            </div>
+        </div>)}
         <section className='max-w-7xl mx-auto'>
             <div>
                 <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[32px]'>{type === 'user' ? 'Gallery' : type === 'favourites' ? 'Favourites' : 'Community Showcase'}</h1>
@@ -131,6 +141,8 @@ const Home = ({ type }) => {
                                 <RenderCards
                                     data={searchedRes}
                                     title="No search results found"
+                                    type={type}
+                                    setEnlarge={setEnlarge}
                                 />
                             ) : 
                             (
@@ -138,6 +150,7 @@ const Home = ({ type }) => {
                                     data={ type === 'user' ? currentUser.posts : type === 'favourites' ? currentUser.favourites : allPosts}
                                     title="No posts found"
                                     type={type}
+                                    setEnlarge={setEnlarge}
                                 />
                             )}
                         </div>
