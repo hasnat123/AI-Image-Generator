@@ -134,7 +134,7 @@ const CreatePost = () => {
           {error && <p className='mt-5 text-[#df3333]'>You must enter a prompt</p>}
 
           <div className='mt-5 flex gap-5'>
-              <button disabled={(generatingImage || loading) ? true : false} type='button' onClick={HandleGenerate} className={`${(generatingImage || loading) ? 'cursor-not-allowed bg-green-500' : 'bg-green-700'} text-white font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center`}>
+              <button disabled={(generatingImage || loading) ? true : false} type='button' onClick={HandleGenerate} className={`${(generatingImage || loading) ? 'cursor-not-allowed bg-green-600' : 'bg-green-700'} text-white font-medium rounded-md text-sm w-full xs:w-auto px-5 py-2.5 text-center`}>
                 {generatingImage ? 'Generating...' : 'Generate'}
               </button>
           </div>
