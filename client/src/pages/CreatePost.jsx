@@ -113,7 +113,7 @@ const CreatePost = () => {
               HandleSurpriseMe={HandleSurpriseMe}
             />
 
-            <div className='relative w-[100%] max-w-[16rem] sm:w-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center'>
+            <div className='relative aspect-square max-w-[25rem] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-3 flex justify-center items-center'>
               {form.photo ?
               (
                 <img src={form.photo} alt={form.prompt} className='w-full h-full object-contain' />
