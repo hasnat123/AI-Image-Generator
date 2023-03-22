@@ -60,13 +60,13 @@ const App = () => {
   return (
     <HelmetProvider>
 
-      <Helmet>
+      {/* <Helmet>
         <title>Dreamscape - Ultimate AI Image Generator for Designers and Artists</title>
         <meta
           name="description"
           content="Unleash your creativity with Dreamscape, a revolutionary tool for creating digital art and realistic images with the power of artificial intelligence."
         />
-      </Helmet>
+      </Helmet> */}
 
       <BrowserRouter>
         <div className={`${isDark ? 'dark' : ''}`}>
