@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { download, enlargeIcon } from '../assets'
+import { download, enlargeIcon, heart, heart2, share } from '../assets'
 import { downloadImage } from '../utils'
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOfflineOutlined';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { favourites } from '../Redux/UserSlice';
 
-const Card = ({ _id, name, prompt, photo, profilePic, type, setEnlarge }) => {
+const Card = ({ _id, name, prompt, photo, profilePic, favouritesCount, type, setEnlarge, setCurrentPost }) => {
 
   const { currentUser } = useSelector((state) => state.user)
 
@@ -32,16 +33,29 @@ const Card = ({ _id, name, prompt, photo, profilePic, type, setEnlarge }) => {
 
   return (
     <>
-      {/* {enlarge && (<div className='bg-black bg-opacity-95 fixed inset-0 flex items-center justify-center z-50'>
-        <div className='w-[93%] max-w-[30rem] lg:max-w-[35rem] xl:max-w-[45rem] h-auto rounded-xl'>
-          <CloseIcon sx={{ fontSize:  { xs: '1.85rem', sm: '2rem', md: '2.25rem' }}} className='absolute bg-[#eeeeee] top-[25px] sm:top-[30px] md:top-[40px] right-[3.5%] md:right-[40px] text-[#222328] cursor-pointer rounded-[5px]' onClick={() => setEnlarge(false)}/>
-          <img src={photo} alt={prompt} className='w-[100%] h-auto object-cover rounded-xl'/>
-        </div>
-      </div>)} */}
       <div className ='rounded-xl group relative z-0 shadow-card dark:shadow-card_dark hover:shadow-cardhover dark:hover:shadow-cardhover_dark card'>
-        {/* {currentUser?.favourites?.some(favourite => favourite?._id === _id) ? <FavoriteIcon className='group-hover:block hidden absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{ color: '#db1e1e', fontSize: '2.5em' }}/> : (<FavoriteIcon className='group-hover:block hidden absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{fontSize: '2.5em' }}/>)} */}
-        <div className='group-hover:block hidden'><FavoriteIcon className='absolute right-3 top-3 bg-white p-2 rounded-full cursor-pointer' onClick={HandleFavourite} sx={{ color: currentUser?.favourites?.some(favourite => favourite?._id === _id) ? '#6f45d1' : '', fontSize: '2.5em' }}/></div>
+      {/* <Share description='Check out my creation on Dreamscape!' url={photo}/> */}
+        {/* <div className='group-hover:block hidden'><div className='absolute right-3 top-3 rounded-full bg-[#10131f] p-2 pl-4' onClick={HandleFavourite}><span className='text-[#eeeeee] mr-4'>444444444444</span><FavoriteIcon className='bg-white p-2 rounded-full cursor-pointer' sx={{ color: currentUser?.favourites?.some(favourite => favourite?._id === _id) ? '#6f45d1' : '', fontSize: '2.5em' }}/></div></div> */}
         <img src={photo} alt={prompt} className='w-full h-auto object-cover rounded-xl'/>
+        <div className='group-hover:hidden flex-col max-h-[70%] sm:max-h-[72%] flex absolute bottom-0 left-0 right-0 bg-[#10131f] bg-opacity-90 m-2 p-4 rounded-md'>
+          <div className=' flex justify-between items-center gap-2'>
+            <div className='flex items-center gap-2 overflow-hidden'>
+            {type !== 'user' && (profilePic ?
+              (<img src={profilePic} alt='User profile picture' className='w-7 h-7 rounded-full object-cover'/>) : 
+              (<div className='w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold'>
+                {name && name[0]}
+              </div>))}
+              <p className='flex-1 text-white text-sm whitespace-nowrap overflow-hidden text-ellipsis'>{(type !== 'user') && name}</p>
+            </div>
+            <div className='flex items-center justify-between gap-[5px] lg:gap-[7.5px]'>
+              <span className='text-[#fff] text-sm'>{favouritesCount}</span>
+              <button type='button' onClick={HandleFavourite} className='outline-none bg-transparent border-none'>
+                { currentUser?.favourites?.some(favourite => favourite?._id === _id) ?  <img src={heart} alt="Enlarge image" className='w-5 h-5 min-w-[24px] object-contain'/> : <img src={heart2} alt="Enlarge image" className='w-5 h-5 min-w-[24px] object-contain'/> }
+              </button>
+            </div>
+
+          </div>
+        </div>
         <div className='group-hover:flex flex-col max-h-[70%] sm:max-h-[72%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-4 rounded-md'>
           <p className='pr-3 sm:pr-3 pb-3 scrollbar-thin scrollbar-thumb-rounded scrollbar-track-rounded scrollbar-thumb-gray-400 scrollbar-track-gray-700 scrollbar-thumb-opacity-50 scrollbar-track-opacity-50 text-white text-md overflow-y-auto'>{prompt}</p>
           <div className='mt-2 flex justify-between items-center gap-2'>
@@ -51,14 +65,22 @@ const Card = ({ _id, name, prompt, photo, profilePic, type, setEnlarge }) => {
               (<div className='w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold'>
                 {name && name[0]}
               </div>))}
+              {/* <p class='absolute z-10 bottom-[-3rem] left-1/2 transform -translate-x-1/2 text-white text-sm whitespace-nowrap overflow-visible text-ellipsis hidden group-hover:block bg-black bg-opacity-90 p-2 rounded-md'>{(type !== 'user') && name}</p> */}
               <p className='flex-1 text-white text-sm whitespace-nowrap overflow-hidden text-ellipsis'>{(type !== 'user') && name}</p>
+
             </div>
-            <div className='flex items-center justify-between gap-[10px]'>
-              <button type='button' onClick={() => setEnlarge(photo)} className='hidden xs:block outline-none bg-transparent border-none'>
-                <img src={enlargeIcon} alt="Enlarge image" className='w-6 h-6 min-w-[24px] object-contain invert'/>
-              </button>
+            <div className='flex items-center justify-between gap-[5px]'>
               <button type='button' onClick={() => downloadImage(_id, photo)} className='outline-none bg-transparent border-none'>
-                <img src={download} alt="Download image" className='w-6 h-6 min-w-[24px] object-contain invert'/>
+                <img src={download} alt="Download image" className='w-5 h-5 min-w-[24px] object-contain invert'/>
+              </button>
+              <button type='button' onClick={() => setCurrentPost(photo)} className='outline-none bg-transparent border-none'>
+                <img src={share} alt="Share image" className='w-5 h-5 min-w-[24px] object-contain invert'/>
+              </button>
+              <button type='button' onClick={() => setEnlarge(photo)} className='hidden xs:block outline-none bg-transparent border-none'>
+                <img src={enlargeIcon} alt="Enlarge image" className='w-5 h-5 min-w-[24px] object-contain invert'/>
+              </button>
+              <button type='button' onClick={HandleFavourite} className='outline-none bg-transparent border-none'>
+                { currentUser?.favourites?.some(favourite => favourite?._id === _id) ?  <img src={heart} alt="Enlarge image" className='w-5 h-5 min-w-[24px] object-contain'/> : <img src={heart2} alt="Enlarge image" className='w-5 h-5 min-w-[24px] object-contain'/> }
               </button>
             </div>
 

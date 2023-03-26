@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { newFavourites, newPosts } from '../Redux/UserSlice'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import CloseIcon from '@mui/icons-material/Close';
+import SharePopup from '../components/SharePopup'
 
-const RenderCards = ({ data, title, type, setEnlarge }) =>
+const RenderCards = ({ data, title, type, setEnlarge, setCurrentPost }) =>
 {
-    if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} type={type} setEnlarge={setEnlarge}/>)
+    if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} type={type} setEnlarge={setEnlarge} setCurrentPost={setCurrentPost}/>)
     return (
         <h2 className='mt-5 font-bold text-[#222328] dark:text-[#eeeeee] text-xl uppercase'>
             {title}
@@ -32,7 +33,7 @@ const Home = ({ type }) => {
     const [searchTimeout, setSearchTimeout] = useState(null)
 
     const [enlarge, setEnlarge] = useState('')
-
+    const [currentPost, setCurrentPost] = useState(null)
 
     useEffect(() =>
     {
@@ -107,6 +108,7 @@ const Home = ({ type }) => {
               <img src={enlarge} className='w-[100%] h-auto object-cover rounded-xl'/>
             </div>
         </div>)}
+        {currentPost && <SharePopup url={currentPost} setCurrentPost={setCurrentPost}/>}
         <section className='max-w-7xl mx-auto'>
             <div>
                 <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[32px]'>{type === 'user' ? 'Gallery' : type === 'favourites' ? 'Favourites' : 'Community Showcase'}</h1>
@@ -143,6 +145,7 @@ const Home = ({ type }) => {
                                     title="No search results found"
                                     type={type}
                                     setEnlarge={setEnlarge}
+                                    setCurrentPost={setCurrentPost}
                                 />
                             ) : 
                             (
@@ -151,6 +154,7 @@ const Home = ({ type }) => {
                                     title="No posts found"
                                     type={type}
                                     setEnlarge={setEnlarge}
+                                    setCurrentPost={setCurrentPost}
                                 />
                             )}
                         </div>

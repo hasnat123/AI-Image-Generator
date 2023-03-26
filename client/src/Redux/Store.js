@@ -1,8 +1,8 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import UserReducer from './UserSlice'
-import VideoReducer from './VideoSlice'
+import VideoReducer from './PostsSlice'
 import CommentsReducer from './CommentsSlice'
-import VideosReducer from './VideosSlice'
+import PostsReducer from './PostsSlice'
 import ChannelReducer from './ChannelSlice'
 
 
@@ -26,7 +26,7 @@ const persistConfig = {
   storage,
 }
 
-const rootReducer = combineReducers({user: UserReducer, video: VideoReducer, comments: CommentsReducer, videos: VideosReducer, channel: ChannelReducer}) //Combining reducers into one 'root reducer'
+const rootReducer = combineReducers({user: UserReducer, video: VideoReducer, comments: CommentsReducer, post: PostsReducer, channel: ChannelReducer}) //Combining reducers into one 'root reducer'
 const persistedReducer = persistReducer(persistConfig, rootReducer) //Passing root reducer into this function so that state 'persists' (stays the same when page reloads)
 
 export const store = configureStore({

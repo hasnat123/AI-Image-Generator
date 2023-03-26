@@ -39,7 +39,7 @@ export const Favourite = async(req, res) =>
 {
     try
     {
-        const imagePost = await PostModel.findById(req.body._id)
+        const imagePost = await PostModel.findByIdAndUpdate(req.body._id, { $addToSet: { likes: req.user.id }, $inc: { favouritesCount: 1 } })
         await User.findByIdAndUpdate(req.user.id, { $push: { favourites: req.body._id }}, { new: true })
         res.status(200).json(imagePost)  
     }
@@ -53,7 +53,7 @@ export const Unfavourite = async(req, res) =>
 {
     try
     {
-        const imagePost = await PostModel.findById(req.body._id)
+        const imagePost = await PostModel.findByIdAndUpdate(req.body._id, { $pull: { likes: req.user.id }, $inc: { favouritesCount: -1 } })
         await User.findByIdAndUpdate(req.user.id, { $pull: { favourites: req.body._id }}, { new: true })
         res.status(200).json(imagePost)
     }
