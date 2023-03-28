@@ -18,8 +18,11 @@ export const PostsSlice = createSlice({
       },
       fetchSuccess: (state, action) =>
       {
-        state.loading = false
         state.currentPost = action.payload
+      },
+      remove: (state) =>
+      {
+        state.currentPost = null
       },
       fetchFailure: (state) =>
       {
@@ -37,6 +40,6 @@ export const PostsSlice = createSlice({
     }
   })
 
-  export const { fetchStart, fetchSuccess, fetchFailure, favourite, unfavourite } = PostsSlice.actions
+  export const { fetchStart, fetchSuccess, fetchFailure, favourite, unfavourite, remove } = PostsSlice.actions
 
   export default PostsSlice.reducer

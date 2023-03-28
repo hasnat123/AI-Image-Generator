@@ -13,8 +13,7 @@ const EmailVerification = () => {
         const Verify = async() =>
         {
             try {
-                const res = await axios.get(`https://api.dreamscapepro.com/api/v1/auth/${params.id}/verify/${params.token}`)
-                console.log(res.data)
+                const res = await axios.get(`api/v1/auth/${params.id}/verify/${params.token}`)
             } catch (error) {
                 console.log(error.response.data.message)
             }

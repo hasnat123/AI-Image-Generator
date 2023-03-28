@@ -85,3 +85,17 @@ export const GetUserPosts = async(req, res) =>
         res.status(500).json({ success: false, message: error })
     }
 }
+
+export const GetPost = async (req, res, next) =>
+{
+    try
+    {
+        const post = await PostModel.findById(req.params.id)
+        if (!post) return res.status(404).json("Post not found")
+        else res.status(200).json({ success: true, data: post })
+    }
+    catch (error)
+    {
+        res.status(500).json({ success: false, message: error })
+    }
+}

@@ -124,7 +124,7 @@ const ChangeProfilePic = () => {
                 // Update user's profile picture in the backend
                 axios
                   .put(
-                    `https://api.dreamscapepro.com/api/v1/user`,
+                    `api/v1/user`,
                     { image: downloadURL },
                     { withCredentials: true }
                   )

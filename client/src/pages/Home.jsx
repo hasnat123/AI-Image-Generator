@@ -8,10 +8,11 @@ import { newFavourites, newPosts } from '../Redux/UserSlice'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import CloseIcon from '@mui/icons-material/Close';
 import SharePopup from '../components/SharePopup'
+import { remove } from '../Redux/PostsSlice'
 
-const RenderCards = ({ data, title, type, setEnlarge, setCurrentPost }) =>
+const RenderCards = ({ data, title, type, setEnlarge }) =>
 {
-    if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} type={type} setEnlarge={setEnlarge} setCurrentPost={setCurrentPost}/>)
+    if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} type={type} setEnlarge={setEnlarge} />)
     return (
         <h2 className='mt-5 font-bold text-[#222328] dark:text-[#eeeeee] text-xl uppercase'>
             {title}
@@ -25,6 +26,7 @@ const Home = ({ type }) => {
 
     const dispatch = useDispatch()
     const { currentUser } = useSelector((state) => state.user)
+    const { currentPost } = useSelector((state) => state.post)
 
     const [loading, setLoading] = useState(false)
     const [allPosts, setAllPosts] = useState(null)
@@ -33,7 +35,6 @@ const Home = ({ type }) => {
     const [searchTimeout, setSearchTimeout] = useState(null)
 
     const [enlarge, setEnlarge] = useState('')
-    const [currentPost, setCurrentPost] = useState(null)
 
     useEffect(() =>
     {
@@ -42,10 +43,11 @@ const Home = ({ type }) => {
             setLoading(true)
             try
             {
-                const res = type === 'user' ? await axios.get('https://api.dreamscapepro.com/api/v1/post/user-posts', { withCredentials: true }) : type === 'favourites' ? await axios.get('https://api.dreamscapepro.com/api/v1/post/favourites', { withCredentials: true }) : await axios.get('https://api.dreamscapepro.com/api/v1/post', { withCredentials: true })
+                const res = type === 'user' ? await axios.get('api/v1/post/user-posts', { withCredentials: true }) : type === 'favourites' ? await axios.get('api/v1/post/favourites', { withCredentials: true }) : await axios.get('api/v1/post', { withCredentials: true })
 
                 if (res.status === 200) type === 'user' ? dispatch(newPosts(res.data.data.reverse())) : type === 'favourites' ? dispatch(newFavourites(res.data.data.reverse()))  : setAllPosts(res.data.data.reverse())
-                console.log(res.data.data)
+                dispatch(remove())
+
             }
             catch(err)
             {
@@ -67,9 +69,8 @@ const Home = ({ type }) => {
         {
             try
             {
-                const res = await axios.get('https://api.dreamscapepro.com/api/v1/post/favourites', { withCredentials: true })
+                const res = await axios.get('api/v1/post/favourites', { withCredentials: true })
                 dispatch(newFavourites(res.data.data.reverse()))
-                console.log(res.data.data)
             }
             catch(err)
             {
@@ -108,7 +109,7 @@ const Home = ({ type }) => {
               <img src={enlarge} className='w-[100%] h-auto object-cover rounded-xl'/>
             </div>
         </div>)}
-        {currentPost && <SharePopup url={currentPost} setCurrentPost={setCurrentPost}/>}
+        {currentPost && <SharePopup />}
         <section className='max-w-7xl mx-auto'>
             <div>
                 <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[32px]'>{type === 'user' ? 'Gallery' : type === 'favourites' ? 'Favourites' : 'Community Showcase'}</h1>
@@ -145,7 +146,6 @@ const Home = ({ type }) => {
                                     title="No search results found"
                                     type={type}
                                     setEnlarge={setEnlarge}
-                                    setCurrentPost={setCurrentPost}
                                 />
                             ) : 
                             (
@@ -154,7 +154,6 @@ const Home = ({ type }) => {
                                     title="No posts found"
                                     type={type}
                                     setEnlarge={setEnlarge}
-                                    setCurrentPost={setCurrentPost}
                                 />
                             )}
                         </div>

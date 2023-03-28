@@ -6,6 +6,7 @@ import DownloadForOfflineOutlinedIcon from '@mui/icons-material/DownloadForOffli
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { favourites } from '../Redux/UserSlice';
+import { fetchSuccess } from '../Redux/PostsSlice';
 
 const Card = ({ _id, name, prompt, photo, profilePic, favouritesCount, type, setEnlarge, setCurrentPost }) => {
 
@@ -20,10 +21,9 @@ const Card = ({ _id, name, prompt, photo, profilePic, favouritesCount, type, set
     try
     {
       const res = currentUser.favourites.some(favourite => favourite._id === _id)
-        ? (await axios.put('https://api.dreamscapepro.com/api/v1/user/unfavourite', { _id }, { withCredentials: true }))
-        : (await axios.put('https://api.dreamscapepro.com/api/v1/user/favourite', { _id }, { withCredentials: true }))
+        ? (await axios.put('api/v1/user/unfavourite', { _id }, { withCredentials: true }))
+        : (await axios.put('api/v1/user/favourite', { _id }, { withCredentials: true }))
       dispatch(favourites(res.data))
-      console.log(res.data)
     }
     catch(err)
     {
@@ -37,7 +37,7 @@ const Card = ({ _id, name, prompt, photo, profilePic, favouritesCount, type, set
       {/* <Share description='Check out my creation on Dreamscape!' url={photo}/> */}
         {/* <div className='group-hover:block hidden'><div className='absolute right-3 top-3 rounded-full bg-[#10131f] p-2 pl-4' onClick={HandleFavourite}><span className='text-[#eeeeee] mr-4'>444444444444</span><FavoriteIcon className='bg-white p-2 rounded-full cursor-pointer' sx={{ color: currentUser?.favourites?.some(favourite => favourite?._id === _id) ? '#6f45d1' : '', fontSize: '2.5em' }}/></div></div> */}
         <img src={photo} alt={prompt} className='w-full h-auto object-cover rounded-xl'/>
-        <div className='group-hover:hidden flex-col max-h-[70%] sm:max-h-[72%] flex absolute bottom-0 left-0 right-0 bg-[#10131f] bg-opacity-90 m-2 p-4 rounded-md'>
+        <div className='group-hover:hidden flex-col max-h-[70%] sm:max-h-[72%] flex absolute bottom-0 left-0 right-0 bg-[#10131f] bg-opacity-90 m-2 p-3 xs:p-4 rounded-md'>
           <div className=' flex justify-between items-center gap-2'>
             <div className='flex items-center gap-2 overflow-hidden'>
             {type !== 'user' && (profilePic ?
@@ -56,7 +56,7 @@ const Card = ({ _id, name, prompt, photo, profilePic, favouritesCount, type, set
 
           </div>
         </div>
-        <div className='group-hover:flex flex-col max-h-[70%] sm:max-h-[72%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-4 rounded-md'>
+        <div className='group-hover:flex flex-col max-h-[70%] sm:max-h-[72%] hidden absolute bottom-0 left-0 right-0 bg-[#10131f] m-2 p-3 xs:p-4 rounded-md'>
           <p className='pr-3 sm:pr-3 pb-3 scrollbar-thin scrollbar-thumb-rounded scrollbar-track-rounded scrollbar-thumb-gray-400 scrollbar-track-gray-700 scrollbar-thumb-opacity-50 scrollbar-track-opacity-50 text-white text-md overflow-y-auto'>{prompt}</p>
           <div className='mt-2 flex justify-between items-center gap-2'>
             <div className='flex items-center gap-2 overflow-hidden'>
@@ -73,7 +73,7 @@ const Card = ({ _id, name, prompt, photo, profilePic, favouritesCount, type, set
               <button type='button' onClick={() => downloadImage(_id, photo)} className='outline-none bg-transparent border-none'>
                 <img src={download} alt="Download image" className='w-5 h-5 min-w-[24px] object-contain invert'/>
               </button>
-              <button type='button' onClick={() => setCurrentPost(photo)} className='outline-none bg-transparent border-none'>
+              <button type='button' onClick={() => dispatch(fetchSuccess(`http://localhost:5173/post/${_id}`))} className='outline-none bg-transparent border-none'>
                 <img src={share} alt="Share image" className='w-5 h-5 min-w-[24px] object-contain invert'/>
               </button>
               <button type='button' onClick={() => setEnlarge(photo)} className='hidden xs:block outline-none bg-transparent border-none'>

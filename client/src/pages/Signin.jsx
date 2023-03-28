@@ -55,7 +55,6 @@ const Signin = () => {
       e.preventDefault()
       
       const signinRecaptchaToken = await recaptchaRef.current.executeAsync()
-      console.log(signinRecaptchaToken)
       
       if(signinRecaptchaToken)
       {
@@ -63,12 +62,11 @@ const Signin = () => {
         
         try
         {
-          const res = await axios.post('https://api.dreamscapepro.com/api/v1/auth/signin', { ...signinForm }, { withCredentials: true })
+          const res = await axios.post('api/v1/auth/signin', { ...signinForm }, { withCredentials: true })
           dispatch(loginSuccess(res.data))
           setSignupError('')
           setSigninError('')
           navigate('/')
-          console.log(res)
         }
         catch(err)
         {
@@ -87,14 +85,13 @@ const Signin = () => {
     const HandleSigninGoogle = async () =>
     {
       const signinRecaptchaToken = await recaptchaRef.current.executeAsync()
-      console.log(signinRecaptchaToken)
       if(signinRecaptchaToken)
       {
         dispatch(googleStart())
         signInWithPopup(auth, provider)
         .then((res) =>
         {
-          axios.post('https://api.dreamscapepro.com/api/v1/auth/google',
+          axios.post('api/v1/auth/google',
           {
             username: res.user.displayName,
             email: res.user.email,
@@ -125,18 +122,16 @@ const Signin = () => {
       e.preventDefault()
 
       const signinRecaptchaToken = await recaptchaRef.current.executeAsync()
-      console.log(signinRecaptchaToken)
       if(signinRecaptchaToken)
       {
         dispatch(signupStart())
         try
         {
-          const res = await axios.post('https://api.dreamscapepro.com/api/v1/auth/signup', { ...signupForm }, { withCredentials: true })
+          const res = await axios.post('api/v1/auth/signup', { ...signupForm }, { withCredentials: true })
           dispatch(signupSuccess())
           if (res.data.message && res.data.message === 'Verification') setPopup(true)
           setSignupError('')
           setSigninError('')
-          console.log(res)
         }
         catch(err)
         {
@@ -166,11 +161,10 @@ const Signin = () => {
       {
         try
         {
-          const res = await axios.post('https://api.dreamscapepro.com/api/v1/auth/resend-email', { ...signupForm }, { withCredentials: true })
+          const res = await axios.post('api/v1/resend-email', { ...signupForm }, { withCredentials: true })
           setResend(true)
           setResendCooldown(true)
           setTimeout(() => setResendCooldown(false), 10 * 60 * 1000);
-          console.log(res)
         }
         catch(err)
         {
@@ -201,7 +195,7 @@ const Signin = () => {
 
           <ReCAPTCHA ref={recaptchaRef} size='invisible' sitekey="6LeluRElAAAAALuZE4v1uELfoF3mpLS68ryXzt9i"/>
 
-          <div className='m-auto mt-0 sm:mt-[7vh] flex items-center sm:border-[2px] border-gray-300 rounded-[20px]  flex-col gap-[3px] sm:gap-[10px] p-[1rem] sm:p-[2rem] w-[97%] max-w-[450px]'>
+          <div className='m-auto mt-0 sm:mt-[7vh] flex items-center sm:border-[2px] dark:border-gray-400 border-gray-300 rounded-[20px]  flex-col gap-[3px] sm:gap-[10px] p-[1rem] sm:p-[2rem] w-[97%] max-w-[450px]'>
               <h1 className='font-extrabold text-[#222328] dark:text-[#eeeeee] text-[28px] sm:text-[32px] text-center'>Sign in</h1>
               <h2 className='my-1 text-[#666e75] dark:text-[#CCCCCC] text-[16px] sm:text-[20px] text-center max-w-[500px]'>To continue to Dreamscape</h2>
               <Form type='email' name='email' value={signinForm.email} placeholder='Email' HandleChange={HandleChangeSignin}/>

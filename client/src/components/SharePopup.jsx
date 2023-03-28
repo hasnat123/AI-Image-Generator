@@ -20,6 +20,8 @@ import CloseIcon from '@mui/icons-material/Close';
   
   } from 'react-share'
 import { copyIcon } from '../assets';
+import { remove } from '../Redux/PostsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
   const CustomPrevArrow = (props) => {
@@ -38,9 +40,9 @@ import { copyIcon } from '../assets';
   };
 
 
-const SharePopup = ({url, setCurrentPost}) => {
+const SharePopup = () => {
 
-    const description = 'Check out what I created on Dreamscape!'
+    const description = 'This image was AI generated on Dreamscape'
     const name = 'Dreamscape'
     const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -54,8 +56,10 @@ const SharePopup = ({url, setCurrentPost}) => {
       nextArrow: <CustomNextArrow isDisabled={currentSlide === 2}/>
     };
 
+    const dispatch = useDispatch()
 
     const [copy, setCopy] = useState(false)
+    const { currentPost } = useSelector((state) => state.post)
 
     const HandleSlideChange = (oldIndex, newIndex) =>
     {
@@ -66,7 +70,7 @@ const SharePopup = ({url, setCurrentPost}) => {
     {
       setCopy(true)
 
-      navigator.clipboard.writeText(url).then(() =>
+      navigator.clipboard.writeText(currentPost).then(() =>
       {
         console.log('Copied')
       },
@@ -85,29 +89,29 @@ const SharePopup = ({url, setCurrentPost}) => {
     <>
         <Helmet>
             <meta name="twitter:card" content="summary_large_image"/>
-            <meta name="twitter:image" content={url}/>
-            <meta property="og:image" content={url}></meta>
+            <meta name="twitter:image" content={currentPost}/>
+            <meta property="og:image" content={currentPost}></meta>
         </Helmet>
         <div className='bg-black bg-opacity-95 fixed inset-0 flex items-center justify-center z-50'>
             <div className='hidden sm:block bg-[#222328] px-10 py-8 rounded-xl w-[90%] max-w-[32.5rem]'>
               <div className='relative flex justify-between text-[#eeeeee] mb-5'>
                 <h1 className='text-[1.5rem]'>Share</h1>
-                <CloseIcon sx={{ fontSize: '1.6rem'}} className='absolute right-[-1rem] text-[#eeeeee] cursor-pointer' onClick={() => setCurrentPost(null)}/>
+                <CloseIcon sx={{ fontSize: '1.6rem'}} className='absolute right-[-1rem] text-[#eeeeee] cursor-pointer' onClick={() => dispatch(remove())}/>
               </div>
 
                 <Slider {...settings} beforeChange={HandleSlideChange}>
-                  <FacebookShareButton url={url} quote={description}><FacebookIcon size={60} round={true}/></FacebookShareButton>
-                  <TwitterShareButton url={url} title={description} via={name}><TwitterIcon size={60} round={true}/></TwitterShareButton>
-                  <WhatsappShareButton url={url} title={description}><WhatsappIcon size={60} round={true}/></WhatsappShareButton>
-                  <TelegramShareButton url={url} title={description}><TelegramIcon size={60} round={true}/></TelegramShareButton>
-                  <PinterestShareButton url={url} media={url} description={description}><PinterestIcon size={60} round={true}/></PinterestShareButton>
-                  <LinkedinShareButton url={url} title='Check out what I created!' description='This image was AI generated on Dreamscape' source='https://dreamscapepro.com'><LinkedinIcon size={60} round={true}/></LinkedinShareButton>
-                  <EmailShareButton url={url} subject='Check out what I created!' body='This image was AI generated on Dreamscape'><EmailIcon size={60} round={true}/></EmailShareButton>
+                  <FacebookShareButton url={currentPost} quote={description}><FacebookIcon size={60} round={true}/></FacebookShareButton>
+                  <TwitterShareButton url={currentPost} title={description} via={name}><TwitterIcon size={60} round={true}/></TwitterShareButton>
+                  <WhatsappShareButton url={currentPost} title={description}><WhatsappIcon size={60} round={true}/></WhatsappShareButton>
+                  <TelegramShareButton url={currentPost} title={description}><TelegramIcon size={60} round={true}/></TelegramShareButton>
+                  <PinterestShareButton url={currentPost} media={currentPost} description={description}><PinterestIcon size={60} round={true}/></PinterestShareButton>
+                  <LinkedinShareButton url={currentPost} title='Check this out!' description={description} source='https://dreamscapepro.com'><LinkedinIcon size={60} round={true}/></LinkedinShareButton>
+                  <EmailShareButton url={currentPost} subject='Check this out!' body={description}><EmailIcon size={60} round={true}/></EmailShareButton>
                 </Slider>
                 <div className='flex justify-between mt-10 border border-gray-300 rounded-lg w-full px-3 py-2'>
                   <input
                     type="text"
-                    value={url}
+                    value={currentPost}
                     disabled={true}
                     className='cursor-text bg-transparent border-none text-[#eeeeee] text-sm outline-none w-[75%]'
                   />
@@ -121,17 +125,17 @@ const SharePopup = ({url, setCurrentPost}) => {
             <div className='relative flex flex-col items-center sm:hidden bg-[#222328] px-10 py-6 rounded-xl w-[90%] max-w-[300px]'>
               <div className='flex justify-center text-[#eeeeee] mb-10'>
                 <h1 className='text-[1.7rem]'>Share</h1>
-                <CloseIcon sx={{ fontSize: '1.6rem'}} className='absolute top-8 right-[1rem] text-[#eeeeee] cursor-pointer' onClick={() => setCurrentPost(null)}/>
+                <CloseIcon sx={{ fontSize: '1.6rem'}} className='absolute top-8 right-[1rem] text-[#eeeeee] cursor-pointer' onClick={() => dispatch(remove())}/>
               </div>
 
                 <div className='grid grid-cols-3 gap-x-10 gap-y-4 justify-items-center '>
-                  <FacebookShareButton url={url} quote={description}><FacebookIcon size={60} round={true}/></FacebookShareButton>
-                  <TwitterShareButton url={url} title={description} via={name}><TwitterIcon size={60} round={true}/></TwitterShareButton>
-                  <WhatsappShareButton url={url} title={description}><WhatsappIcon size={60} round={true}/></WhatsappShareButton>
-                  <TelegramShareButton url={url} title={description}><TelegramIcon size={60} round={true}/></TelegramShareButton>
-                  <PinterestShareButton url={url} media={url} description={description}><PinterestIcon size={60} round={true}/></PinterestShareButton>
-                  <LinkedinShareButton url={url} title='Check out what I created!' description='This image was AI generated on Dreamscape' source='https://dreamscapepro.com'><LinkedinIcon size={60} round={true}/></LinkedinShareButton>
-                  <EmailShareButton url={url} subject='Check out what I created!' body='This image was AI generated on Dreamscape'><EmailIcon size={60} round={true}/></EmailShareButton>
+                  <FacebookShareButton url={currentPost} quote={description}><FacebookIcon size={60} round={true}/></FacebookShareButton>
+                  <TwitterShareButton url={currentPost} title={description} via={name}><TwitterIcon size={60} round={true}/></TwitterShareButton>
+                  <WhatsappShareButton url={currentPost} title={description}><WhatsappIcon size={60} round={true}/></WhatsappShareButton>
+                  <TelegramShareButton url={currentPost} title={description}><TelegramIcon size={60} round={true}/></TelegramShareButton>
+                  <PinterestShareButton url={currentPost} media={currentPost} description={description}><PinterestIcon size={60} round={true}/></PinterestShareButton>
+                  <LinkedinShareButton url={currentPost} title='Check out what I created!' description='This image was AI generated on Dreamscape' source='https://dreamscapepro.com'><LinkedinIcon size={60} round={true}/></LinkedinShareButton>
+                  <EmailShareButton url={currentPost} subject='Check out what I created!' body='This image was AI generated on Dreamscape'><EmailIcon size={60} round={true}/></EmailShareButton>
                 </div>
 
                   <button
