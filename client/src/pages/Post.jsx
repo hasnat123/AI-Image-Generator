@@ -82,7 +82,7 @@ const Post = () => {
                       { currentUser?.favourites?.some(favourite => favourite?._id === post._id) ?  <img src={heart} alt="Enlarge image" className='w-5 h-5 min-w-[24px] object-contain'/> : <img src={heart2} alt="Enlarge image" className='w-5 h-5 min-w-[24px] object-contain'/> }
                     </button>
                     <span className='inline-block group-hover:hidden text-[#fff] text-sm'>{post.favouritesCount}</span>
-                    <button type='button' onClick={() => dispatch(fetchSuccess(`https://dreamscapepro.com/post/${post._id}`))} className='outline-none bg-transparent border-none'>
+                    <button type='button' onClick={() => dispatch(fetchSuccess([`https://dreamscapepro.com/post/${post._id}`, post.photo]))} className='outline-none bg-transparent border-none'>
                       <img src={share} alt="Share image" className='hidden group-hover:block w-5 h-5 min-w-[24px] object-contain invert'/>
                     </button>
                     <button type='button' onClick={() => downloadImage(post._id, post.photo)} className='outline-none bg-transparent border-none'>

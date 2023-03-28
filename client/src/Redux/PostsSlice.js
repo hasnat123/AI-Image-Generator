@@ -4,6 +4,7 @@ import { createSlice, current } from '@reduxjs/toolkit'
 const initialState =
 {
     currentPost: null,
+    currentImage: null,
     loading: false,
     error: false
 }
@@ -18,7 +19,8 @@ export const PostsSlice = createSlice({
       },
       fetchSuccess: (state, action) =>
       {
-        state.currentPost = action.payload
+        state.currentPost = action.payload[0]
+        state.currentImage = action.payload[1]
       },
       remove: (state) =>
       {

@@ -39,6 +39,7 @@ const App = () => {
 
   const dispatch = useDispatch()
   const { currentUser } = useSelector(state => state.user)
+  const { currentImage } = useSelector(state => state.post)
 
   const HandleToggle = (event) => {
     if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -72,7 +73,6 @@ const App = () => {
 
     setGetProperty(window.getComputedStyle(detect).getPropertyValue('display'));
 
-
   }, []);
 
   // useEffect(() => {
@@ -83,14 +83,11 @@ const App = () => {
   
   return (
     <HelmetProvider>
-
-      {/* <Helmet>
-        <title>Dreamscape - Ultimate AI Image Generator for Designers and Artists</title>
-        <meta
-          name="description"
-          content="Unleash your creativity with Dreamscape, a revolutionary tool for creating digital art and realistic images with the power of artificial intelligence."
-        />
-      </Helmet> */}
+      <Helmet>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:image" content={currentImage}/>
+        <meta property="og:image" content={currentImage}/>
+      </Helmet>
       <div id='detect' ref={detectRef}></div>
         <div className={`${isDark ? 'dark' : ''}`}>
           <header className='bg-[#fff] dark:bg-[#202124] w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-[#e6ebff4] dark:border-b-[#3C4043]' onClick={HandleToggle}>
