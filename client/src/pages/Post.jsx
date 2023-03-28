@@ -27,8 +27,8 @@ const Post = () => {
         if (currentUser)
         {
           const res = currentUser.favourites.some(favourite => favourite._id === post._id)
-          ? (await axios.put('api/v1/user/unfavourite', { _id: post._id }, { withCredentials: true }))
-          : (await axios.put('api/v1/user/favourite', { _id: post._id }, { withCredentials: true }))
+          ? (await axios.put('/api/v1/user/unfavourite', { _id: post._id }, { withCredentials: true }))
+          : (await axios.put('/api/v1/user/favourite', { _id: post._id }, { withCredentials: true }))
           dispatch(favourites(res.data))
         }
         else navigate('/signin')
@@ -46,7 +46,7 @@ const Post = () => {
         {
             try
             {
-                const res = await axios.get(`api/v1/post/find/${id}`, { withCredentials: true })
+                const res = await axios.get(`/api/v1/post/find/${id}`, { withCredentials: true })
                 // dispatch(newFavourites(res.data.data.reverse()))
                 setPost(res.data.data)
                 dispatch(remove())
