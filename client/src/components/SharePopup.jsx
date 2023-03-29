@@ -58,7 +58,7 @@ const SharePopup = () => {
     const dispatch = useDispatch()
 
     const [copy, setCopy] = useState(false)
-    const { currentPost } = useSelector((state) => state.post)
+    const { currentPost, currentImage } = useSelector((state) => state.post)
 
     const HandleSlideChange = (oldIndex, newIndex) =>
     {

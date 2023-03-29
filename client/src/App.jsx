@@ -39,7 +39,7 @@ const App = () => {
 
   const dispatch = useDispatch()
   const { currentUser } = useSelector(state => state.user)
-  const { currentImage } = useSelector(state => state.post)
+  const { currentImage, currentPost } = useSelector(state => state.post)
 
   const HandleToggle = (event) => {
     if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -86,7 +86,11 @@ const App = () => {
       <Helmet>
         <meta name="twitter:card" content="summary_large_image"/>
         <meta name="twitter:image" content={currentImage}/>
-        <meta property="og:image" content={currentImage}/>
+
+        <meta property='og:title' content='Check out what I created!'/>
+        <meta property='og:image' content={currentImage}/>
+        <meta property='og:description' content='This image was AI generated on Dreamscape'/>
+        <meta property='og:url' content={currentPost}/>
       </Helmet>
       <div id='detect' ref={detectRef}></div>
         <div className={`${isDark ? 'dark' : ''}`}>
