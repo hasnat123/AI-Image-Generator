@@ -12,7 +12,6 @@ const usePosts = (pageNum = 1, baseUrl, searchText) => {
     setIsLoading(true)
     setIsError(false)
     setError({})
-    console.log(pageNum)
     let timeoutId
     const controller = new AbortController()
     const { signal } = controller
@@ -24,7 +23,6 @@ const usePosts = (pageNum = 1, baseUrl, searchText) => {
             setIsLoading(false)
             setResults(prev => [...prev, ...data])
             setHasNextPage(Boolean(data.length))
-            console.log(data)
           })
           .catch(err => {
             setIsLoading(false)
