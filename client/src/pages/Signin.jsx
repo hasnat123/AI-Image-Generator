@@ -161,7 +161,7 @@ const Signin = () => {
       {
         try
         {
-          const res = await axios.post('api/v1/resend-email', { ...signupForm }, { withCredentials: true })
+          const res = await axios.post('api/v1/auth/resend-email', { ...signupForm }, { withCredentials: true })
           setResend(true)
           setResendCooldown(true)
           setTimeout(() => setResendCooldown(false), 10 * 60 * 1000);

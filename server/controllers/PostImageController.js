@@ -12,14 +12,160 @@ cloudinary.config({
     secure: true
 })
 
+// export const GetPosts = async(req, res) =>
+// {
+//     const page = req.query.page || 1
+//     const pageSize = 10
+ 
+//     try {
+//         const totalPages = Math.ceil(await PostModel.countDocuments() / pageSize)
+//         const startIndex = (totalPages - page) * pageSize
+//         if (startIndex >= 0)
+//         {
+//             const posts = (await PostModel.find({}).skip(startIndex).limit(pageSize)).reverse()
+//             res.status(200).json({ success: true, data: posts })
+//         }
+//         else
+//         {
+//             res.status(200).json({ success: true, data: [] })
+//         }
+        
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: error })
+//     }
+// }
+
 export const GetPosts = async(req, res) =>
 {
+    const page = req.query.page || 1
+    const pageSize = 10
+    const searchTerm = req.query.search || ''
+ 
     try {
-        
-        const posts = await PostModel.find({})
-        res.status(200).json({ success: true, data: posts })
+        let query = {}
+        if (searchTerm !== '') {
+            query = {
+                $or: [
+                    {name: { $regex: searchTerm, $options: 'i' }},
+                    {prompt: { $regex: searchTerm, $options: 'i' }}
+                ]
+            }
+        }
+
+        const count = await PostModel.countDocuments(query)
+        const totalPages = Math.ceil(count / pageSize)
+        const startIndex = (totalPages - page) * pageSize
+
+        if (startIndex >= 0)
+        {
+            const posts = (await PostModel.find(query).skip(startIndex).limit(pageSize)).reverse()
+            res.status(200).json({ success: true, data: posts })
+        }
+        else {
+            res.status(200).json({ success: true, data: [] })
+        }
         
     } catch (error) {
+        res.status(500).json({ success: false, message: error })
+    }
+}
+
+
+export const GetFavouritePosts = async(req, res) => {
+    const page = req.query.page || 1;
+    const pageSize = 10;
+    const searchTerm = req.query.search || '';
+    
+    try {
+        const userId = req.user.id;
+        const user = await UserModel.findById(userId);
+        const favourites = user.favourites;
+        let query = { _id: { $in: favourites }, userId };
+
+        if (searchTerm !== '') {
+            query = {
+                $and: [
+                    { _id: { $in: favourites } },
+                    {
+                        $or: [
+                            { name: { $regex: searchTerm, $options: 'i' } },
+                            { prompt: { $regex: searchTerm, $options: 'i' } }
+                        ]
+                    }
+                ]
+            }
+        }
+
+        const allFavourites = await PostModel.find(query);
+        const favouritePosts = allFavourites.filter(post => favourites.includes(post._id.toString()))
+        .sort((a,b) => {
+            return favourites.indexOf(a._id.toString()) - favourites.indexOf(b._id.toString())
+        });
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedPosts = favouritePosts.reverse().slice(startIndex, endIndex);
+        const totalPages = Math.ceil(favouritePosts.length / pageSize);
+    
+        res.status(200).json({ success: true, data: paginatedPosts, totalPages });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: error });
+    }
+}
+
+export const GetUserPosts = async(req, res) =>
+{
+    const page = req.query.page || 1
+    const pageSize = 10
+    const searchTerm = req.query.search || ''
+    
+    try
+    {
+        const userId = req.user.id
+        const user = await UserModel.findById(userId)
+        const userPosts = user.posts;
+        let query = { _id: { $in: userPosts }, userId }
+        if (searchTerm !== '') {
+            query = {
+                $or: [
+                    {name: { $regex: searchTerm, $options: 'i' }},
+                    {prompt: { $regex: searchTerm, $options: 'i' }}
+                ]
+            }
+        }
+
+        
+        const count = await PostModel.countDocuments(query)
+        const totalPages = Math.ceil(count / pageSize)
+        const startIndex = (totalPages - page) * pageSize
+    
+        if (startIndex >= 0)
+        {
+            const postList = (await PostModel.find(query)
+            .skip(startIndex)
+            .limit(pageSize)).reverse()
+            res.status(200).json({ success: true, data: postList })
+        }
+        else
+        {
+            res.status(200).json({ success: true, data: [] })
+        }
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: error })
+    }
+}
+
+export const GetPost = async (req, res, next) =>
+{
+    try
+    {
+        const post = await PostModel.findById(req.params.id)
+        if (!post) return res.status(404).json("Post not found")
+        else res.status(200).json({ success: true, data: post })
+    }
+    catch (error)
+    {
         res.status(500).json({ success: false, message: error })
     }
 }
@@ -39,63 +185,5 @@ export const PostImage = async(req, res) =>
     catch(err)
     {
         res.status(500).json({ success: false, message: err })
-    }
-}
-
-export const GetFavouritePosts = async(req, res) =>
-{
-    try
-    {
-        const user = await UserModel.findById(req.user.id)
-        const favourites = user.favourites;
-
-        
-        const favouritesList = await Promise.all
-        (
-            favourites.map(async (_id) =>
-            {
-                return await PostModel.find({ _id: _id })
-            })
-        )
-        res.status(200).json({ success: true, data: favouritesList.flat().sort((a, b) => b.createdAt - a.createdAt) })
-
-    } catch (error) {
-        res.status(500).json({ success: false, message: error })
-    }
-}
-
-export const GetUserPosts = async(req, res) =>
-{
-    try
-    {
-        const user = await UserModel.findById(req.user.id)
-        const userPosts = user.posts;
-
-        
-        const UserPostsList = await Promise.all
-        (
-            userPosts.map(async (_id) =>
-            {
-                return await PostModel.find({ _id: _id })
-            })
-        )
-        res.status(200).json({ success: true, data: UserPostsList.flat().sort((a, b) => b.createdAt - a.createdAt) })
-
-    } catch (error) {
-        res.status(500).json({ success: false, message: error })
-    }
-}
-
-export const GetPost = async (req, res, next) =>
-{
-    try
-    {
-        const post = await PostModel.findById(req.params.id)
-        if (!post) return res.status(404).json("Post not found")
-        else res.status(200).json({ success: true, data: post })
-    }
-    catch (error)
-    {
-        res.status(500).json({ success: false, message: error })
     }
 }

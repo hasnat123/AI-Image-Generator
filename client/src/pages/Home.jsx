@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-
 import { Loader, Card, Form } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { newFavourites, newPosts } from '../Redux/UserSlice'
@@ -9,19 +7,57 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import CloseIcon from '@mui/icons-material/Close';
 import SharePopup from '../components/SharePopup'
 import { remove } from '../Redux/PostsSlice'
+import usePosts from '../hooks/usePosts'
 
-const RenderCards = ({ data, title, type, setEnlarge }) =>
-{
-    if (data?.length > 0) return data.map((post) => <Card key={post._id} {...post} type={type} setEnlarge={setEnlarge} />)
+const RenderCards = ({ data, title, type, setEnlarge, lastPostRef }) => {
+    if (data?.length > 0)
+      return data?.map((post, i) => (
+        <Card
+          key={post?._id}
+          {...post}
+          type={type}
+          setEnlarge={setEnlarge}
+          ref={data.length === i + 1 ? lastPostRef : null}
+        />
+      ));
     return (
-        <h2 className='mt-5 font-bold text-[#222328] dark:text-[#eeeeee] text-xl uppercase'>
-            {title}
-        </h2>
-    )
-}
+      <h2 className="mt-5 font-bold text-[#222328] dark:text-[#eeeeee] text-xl uppercase">{title}</h2>
+    );
+};
 
 const Home = ({ type }) => {
     
+    const [searchText, setSearchText] = useState('')
+    const [pageNum, setPageNum] = useState(1)
+    const [baseUrl, setBaseUrl] = useState(() => {
+        if (type === 'user') return 'user-posts';
+        if (type === 'favourites') return 'favourites';
+        return '';})
+
+    const { isLoading, isError, error, results, hasNextPage } = usePosts(pageNum, baseUrl, searchText)
+    
+    const intObserver = useRef()
+    const lastPostRef = useCallback(post =>
+    {
+        if (isLoading) return
+
+        if(intObserver.current) intObserver.current.disconnect()
+
+        intObserver.current = new IntersectionObserver(posts =>
+        {
+            if (posts[0].isIntersecting && hasNextPage)
+            {
+                console.log('We are near the last post')
+                setPageNum(prev => prev + 1)
+            }
+        })
+        
+        if (post) intObserver.current.observe(post)
+
+
+
+    }, [isLoading, hasNextPage, type])
+
     const navigate = useNavigate()
 
     const dispatch = useDispatch()
@@ -30,57 +66,75 @@ const Home = ({ type }) => {
 
     const [loading, setLoading] = useState(false)
     const [allPosts, setAllPosts] = useState(null)
-    const [searchText, setSearchText] = useState('')
     const [searchedRes, setSearchedRes] = useState(null)
     const [searchTimeout, setSearchTimeout] = useState(null)
 
     const [enlarge, setEnlarge] = useState('')
 
-    useEffect(() =>
-    {
-        const fetchPosts = async() =>
-        {
-            setLoading(true)
-            try
-            {
-                const res = type === 'user' ? await axios.get('api/v1/post/user-posts', { withCredentials: true }) : type === 'favourites' ? await axios.get('api/v1/post/favourites', { withCredentials: true }) : await axios.get('api/v1/post', { withCredentials: true })
+    // useEffect(() =>
+    // {
+    //     const fetchPosts = async() =>
+    //     {
+    //         setLoading(true)
+    //         try
+    //         {
+    //             const res = type === 'user' ? await axios.get('api/v1/post/user-posts', { withCredentials: true }) : type === 'favourites' ? await axios.get('api/v1/post/favourites', { withCredentials: true }) : await axios.get('api/v1/post', { withCredentials: true })
 
-                if (res.status === 200) type === 'user' ? dispatch(newPosts(res.data.data.reverse())) : type === 'favourites' ? dispatch(newFavourites(res.data.data.reverse()))  : setAllPosts(res.data.data.reverse())
-                dispatch(remove())
+    //             if (res.status === 200) type === 'user' ? dispatch(newPosts(res.data.data.reverse())) : type === 'favourites' ? dispatch(newFavourites(res.data.data.reverse()))  : setAllPosts(res.data.data)
+    //             dispatch(remove())
 
-            }
-            catch(err)
-            {
-                console.log(err.response.data.message)
-            }
-            finally
-            {
-                setLoading(false)
-            }
-        }
-        fetchPosts()
+    //         }
+    //         catch(err)
+    //         {
+    //             console.log(err.response.data.message)
+    //         }
+    //         finally
+    //         {
+    //             setLoading(false)
+    //         }
+    //     }
+    //     fetchPosts()
+    //     setSearchText('')
+    // }, [type])
+
+    // useEffect(() =>
+    // {
+    //     const fetchFavourites = async() =>
+    //     {
+    //         try
+    //         {
+    //             const res = await axios.get('api/v1/post/favourites', { withCredentials: true })
+    //             dispatch(newFavourites(res.data.data.reverse()))
+    //         }
+    //         catch(err)
+    //         {
+    //             console.log(err.response.data.message)
+    //         }
+    //     }
+        
+    //     fetchFavourites()
+        
+    // }, [])
+
+    useEffect(() => {
+        setPageNum(1);
+        setBaseUrl(() => {
+          if (type === 'user') return 'user-posts';
+          if (type === 'favourites') return 'favourites';
+          return '';
+        });
+        dispatch(remove())
         setSearchText('')
-        
-    }, [type])
+      }, [type]);
 
-    useEffect(() =>
-    {
-        const fetchFavourites = async() =>
-        {
-            try
-            {
-                const res = await axios.get('api/v1/post/favourites', { withCredentials: true })
-                dispatch(newFavourites(res.data.data.reverse()))
-            }
-            catch(err)
-            {
-                console.log(err.response.data.message)
-            }
-        }
-        
-        fetchFavourites()
-        
-    }, [])
+      useEffect(() => {
+        setPageNum(1);
+
+      }, [searchText]);
+
+      useEffect(() => {
+        if(type === 'favourites') dispatch(newFavourites(results))
+      }, [results]);
 
     const HandleSearch = (e) =>
     {
@@ -91,8 +145,9 @@ const Home = ({ type }) => {
         setSearchTimeout(
             setTimeout(() =>
             {
-                const res = type === 'user' ? currentUser.posts.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase())) : type === 'favourites' ? currentUser.favourites.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase())) : allPosts.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase()))
-                setSearchedRes(res)
+                // const res = type === 'favourites' ? currentUser.favourites.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase())) : results.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()) || item.prompt.toLowerCase().includes(searchText.toLowerCase()))
+                // setSearchedRes(res)
+
             }, 500)
         )
 
@@ -126,38 +181,35 @@ const Home = ({ type }) => {
                 />
             </div>
             <div className='mt-10'>
-                {loading ? 
-                (
+
+                {(isLoading && pageNum === 1) ?
                     <div className='flex justify-center items-center'>
                         <Loader/>
                     </div>
-                ) : 
-                (
-                    <>
+                    :(<>
                         {searchText &&
                         (
                             <h2 className='font-medium text-[#666e75] dark:text-[#cccccc] text-xl mb-3'>Showing results for <span className='text-[#222328] dark:text-[#eeeeee]'>{searchText}</span></h2>
                         )}
                         <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
-                            {searchText ?
-                            (
+     
                                 <RenderCards
-                                    data={searchedRes}
-                                    title="No search results found"
-                                    type={type}
-                                    setEnlarge={setEnlarge}
-                                />
-                            ) : 
-                            (
-                                <RenderCards
-                                    data={ type === 'user' ? currentUser.posts : type === 'favourites' ? currentUser.favourites : allPosts}
+                                    // data={ type === 'favourites' ? currentUser.favourites : results}
+                                    data={results}
                                     title="No posts found"
                                     type={type}
                                     setEnlarge={setEnlarge}
+                                    lastPostRef={lastPostRef}
                                 />
-                            )}
                         </div>
-                    </>
+                    </>)
+                }
+
+                {(isLoading && pageNum > 1) &&
+                (
+                    <div className='mt-10 flex justify-center items-center'>
+                        <Loader/>
+                    </div>
                 )}
             </div>
         </section>
